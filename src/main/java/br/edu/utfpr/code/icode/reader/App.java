@@ -26,10 +26,12 @@ public class App
 				System.out.println(p);
 				for (Clazz clazz : classes) {
 					if(clazz.getParent().equals(p)){
-					//	for (String ss : clazz.getDependencies()) {
-
-							System.out.println("----"+clazz.getName()+ " - "+clazz.getDependencies().size());
-						//}
+						String x ="";
+						for (String ss : clazz.getDependencies()) {
+							x += ss+", ";
+						}
+							System.out.println("----"+clazz.getName()+ " - "+x);
+						
 					}
 				}
 			}
