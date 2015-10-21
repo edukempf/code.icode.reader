@@ -8,6 +8,7 @@ import com.github.javaparser.ParseException;
 
 import br.edu.utfpr.code.icode.reader.control.ReaderCode;
 import br.edu.utfpr.code.icode.reader.model.Clazz;
+import br.edu.utfpr.code.icode.reader.model.Dependencie;
 
 /**
  * Hello world!
@@ -27,8 +28,9 @@ public class App
 				for (Clazz clazz : classes) {
 					if(clazz.getParent().equals(p)){
 						String x ="";
-						for (String ss : clazz.getDependencies()) {
-							x += ss+", ";
+						if(clazz.getFieldsDependencies().size() > 0)
+						for (Dependencie ss : clazz.getMethodsDependencies()) {
+							x += ss.getName() + " - " + ss.isExternal() +", ";
 						}
 							System.out.println("----"+clazz.getName()+ " - "+x);
 						
