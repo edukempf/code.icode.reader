@@ -7,7 +7,10 @@ public class Clazz {
 	private String address;
 	private String parent;
 	private String name;
-	private ArrayList<String> dependencies;
+	private ArrayList<Dependencie> interfaceDependencies;
+	private ArrayList<Dependencie> extendsDependencies;
+	private ArrayList<Dependencie> fieldsDependencies;
+	private ArrayList<Dependencie> methodsDependencies;
 	
 	public Clazz(String address, String parent, String name) {
 		this.address = address;
@@ -32,11 +35,29 @@ public class Clazz {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public ArrayList<String> getDependencies() {
-		return dependencies;
+	public ArrayList<Dependencie> getInterfaceDependencies() {
+		return interfaceDependencies;
 	}
-	public void setDependencies(ArrayList<String> dependencies) {
-		this.dependencies = dependencies;
+	public void setInterfaceDependencies(ArrayList<Dependencie> interfaceDependencies) {
+		this.interfaceDependencies = interfaceDependencies;
+	}
+	public ArrayList<Dependencie> getExtendsDependencies() {
+		return extendsDependencies;
+	}
+	public void setExtendsDependencies(ArrayList<Dependencie> extendsDependencies) {
+		this.extendsDependencies = extendsDependencies;
+	}
+	public ArrayList<Dependencie> getFieldsDependencies() {
+		return fieldsDependencies;
+	}
+	public void setFieldsDependencies(ArrayList<Dependencie> fieldsDependencies) {
+		this.fieldsDependencies = fieldsDependencies;
+	}
+	public ArrayList<Dependencie> getMethodsDependencies() {
+		return methodsDependencies;
+	}
+	public void setMethodsDependencies(ArrayList<Dependencie> methodsDependencies) {
+		this.methodsDependencies = methodsDependencies;
 	}
 	
 	
