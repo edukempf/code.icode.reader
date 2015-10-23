@@ -168,9 +168,10 @@ public class ReaderCode {
 				Dependencie dependencie;
 				if (clazz2.getName().replace(".java", "").equals(dependencieName)){
 					if (clazz.getParent().equals(clazz2.getParent()))
-						dependencie = new Dependencie(dependencieName, false);
+						dependencie = new Dependencie(clazz2, false);
 					else
-						dependencie = new Dependencie(dependencieName, true);
+						dependencie = new Dependencie(clazz2, true);
+					//System.out.println(dependencies.contains(dependencie));
 					if (!dependencies.contains(dependencie)
 							&& !clazz.getName().replace(".java", "").equals(dependencieName))
 						dependencies.add(dependencie);
@@ -179,9 +180,9 @@ public class ReaderCode {
 					for (String string : dependecieGeneric) {
 						Dependencie genericDependencie;
 						if (clazz.getParent().equals(clazz2.getParent()))
-							genericDependencie = new Dependencie(string, false);
+							genericDependencie = new Dependencie(clazz2, false);
 						else
-							genericDependencie = new Dependencie(string, true);
+							genericDependencie = new Dependencie(clazz2, true);
 						if (!dependencies.contains(genericDependencie) && clazz2.getName().replace(".java", "").equals(string))
 							dependencies.add(genericDependencie);
 					}
@@ -208,11 +209,12 @@ public class ReaderCode {
 
 			allDependenciesFields.addAll(verifyFields.getDependencies());
 			allDependenciesFields.addAll(variablesVerify.getDependencies());
+			allDependenciesFields.addAll(methodDeclarationVerify.getDependencies());
+			
 
 			clazz.setExtendsDependencies(generateListDependencies(declarationVerify.getExtendsDependencies(), clazz));
 			clazz.setInterfaceDependencies(generateListDependencies(declarationVerify.getImplementsDependencies(), clazz));
-			clazz.setFieldsDependencies(generateListDependencies(allDependenciesFields, clazz));
-			clazz.setMethodsDependencies(generateListDependencies(methodDeclarationVerify.getDependencies(), clazz));
+			clazz.setReferenceDependencies(generateListDependencies(allDependenciesFields, clazz));
 		}
 	}
 

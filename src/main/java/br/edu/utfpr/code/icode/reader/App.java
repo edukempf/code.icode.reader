@@ -7,35 +7,100 @@ import java.util.ArrayList;
 import com.github.javaparser.ParseException;
 
 import br.edu.utfpr.code.icode.reader.control.ReaderCode;
+import br.edu.utfpr.code.icode.reader.control.StructureManager;
 import br.edu.utfpr.code.icode.reader.model.Clazz;
+import br.edu.utfpr.code.icode.reader.model.Component;
+import br.edu.utfpr.code.icode.reader.model.Connector;
+import br.edu.utfpr.code.icode.reader.model.ConnectorStructure;
 import br.edu.utfpr.code.icode.reader.model.Dependencie;
+import br.edu.utfpr.code.icode.reader.model.Structure;
+import br.edu.utfpr.code.icode.reader.model.TypeConnection;
 
 /**
  * Hello world!
  *
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        ReaderCode code = new ReaderCode("D:\\PROJETO EVOLUTEC\\Evolutec\\NeoNatal\\Sistema\\NeoNatal\\src\\br");
-        try {
-			code.readFiles("D:\\PROJETO EVOLUTEC\\Evolutec\\NeoNatal\\Sistema\\NeoNatal\\src\\br");
-			ArrayList<String> pacotes = code.getPackages();
-			ArrayList<Clazz> classes =  code.getClazzes();
-			for (String p : pacotes) {
-				System.out.println(p);
-				for (Clazz clazz : classes) {
-					if(clazz.getParent().equals(p)){
-						String x ="";
-						if(clazz.getFieldsDependencies().size() > 0)
-						for (Dependencie ss : clazz.getMethodsDependencies()) {
-							x += ss.getName() + " - " + ss.isExternal() +", ";
-						}
-							System.out.println("----"+clazz.getName()+ " - "+x);
-						
-					}
+public class App {
+	public static void main(String[] args) {
+		StructureManager sm = new StructureManager();
+		try {
+			Structure s = sm.generateStructure("D:\\PROJETO EVOLUTEC\\Evolutec\\NeoNatal\\Sistema\\NeoNatal\\src\\br");
+			System.out.println("ARQUITETURA");
+			System.out.println("    COMPONENTES");
+			for (Component c : s.getComponents()) {
+				System.out.println("        " + c.getName());
+				System.out.println("            CLASSES");
+				for (Clazz c2 : c.getClazzes()) {
+					System.out.println("                " + c2.getName());
 				}
+				System.out.println("            REQ INT INT");
+				for (Connector c2 : c.getRequiredInternal()) {
+					if (c2.getType() == TypeConnection.INTERFACE)
+						System.out.println("                " + c2.getProvided().getName().replace(".java", "") + "_req_" + c2.getRequired().getName().replace(".java", ""));
+				}
+				System.out.println("            REQ INT EXT");
+				for (Connector c2 : c.getRequiredExternal()) {
+					if (c2.getType() == TypeConnection.INTERFACE)
+						System.out.println("                " + c2.getProvided().getName().replace(".java", "") + "_req_" + c2.getRequired().getName().replace(".java", ""));
+				}
+				System.out.println("            REQ EXT INT");
+				for (Connector c2 : c.getRequiredInternal()) {
+					if (c2.getType() == TypeConnection.EXTENDS)
+						System.out.println("                " + c2.getProvided().getName().replace(".java", "") + "_req_" + c2.getRequired().getName().replace(".java", ""));
+				}
+				System.out.println("            REQ EXT EXT");
+				for (Connector c2 : c.getRequiredExternal()) {
+					if (c2.getType() == TypeConnection.EXTENDS)
+						System.out.println("                " + c2.getProvided().getName().replace(".java", "") + "_req_" + c2.getRequired().getName().replace(".java", ""));
+				}
+				System.out.println("            REQ REF INT");
+				for (Connector c2 : c.getRequiredInternal()) {
+					if (c2.getType() == TypeConnection.REFERENCE)
+						System.out.println("                " + c2.getProvided().getName().replace(".java", "") + "_req_" + c2.getRequired().getName().replace(".java", ""));
+				}
+				System.out.println("            REQ REF EXT");
+				for (Connector c2 : c.getRequiredExternal()) {
+					if (c2.getType() == TypeConnection.REFERENCE)
+						System.out.println("                " + c2.getProvided().getName().replace(".java", "") + "_req_" + c2.getRequired().getName().replace(".java", ""));
+				}
+				System.out.println("            PRO INT INT");
+				for (Connector c2 : c.getProvidedInternal()) {
+					if (c2.getType() == TypeConnection.INTERFACE)
+						System.out.println("                " + c2.getProvided().getName().replace(".java", "") + "_pro_" + c2.getRequired().getName().replace(".java", ""));
+				}
+				System.out.println("            PRO INT EXT");
+				for (Connector c2 : c.getProvidedExternal()) {
+					if (c2.getType() == TypeConnection.INTERFACE)
+						System.out.println("                " + c2.getProvided().getName().replace(".java", "") + "_pro_" + c2.getRequired().getName().replace(".java", ""));
+				}
+				System.out.println("            PRO EXT INT");
+				for (Connector c2 : c.getProvidedInternal()) {
+					if (c2.getType() == TypeConnection.EXTENDS)
+						System.out.println("                " + c2.getProvided().getName().replace(".java", "") + "_pro_" + c2.getRequired().getName().replace(".java", ""));
+				}
+				System.out.println("            PRO EXT EXT");
+				for (Connector c2 : c.getProvidedExternal()) {
+					if (c2.getType() == TypeConnection.EXTENDS)
+						System.out.println("                " + c2.getProvided().getName().replace(".java", "") + "_pro_" + c2.getRequired().getName().replace(".java", ""));
+				}
+				System.out.println("            PRO REF INT");
+				for (Connector c2 : c.getProvidedInternal()) {
+					if (c2.getType() == TypeConnection.REFERENCE)
+						System.out.println("                " + c2.getProvided().getName().replace(".java", "") + "_pro_" + c2.getRequired().getName().replace(".java", ""));
+				}
+				System.out.println("            PRO REF EXT");
+				for (Connector c2 : c.getProvidedExternal()) {
+					if (c2.getType() == TypeConnection.REFERENCE)
+						System.out.println("                " + c2.getProvided().getName().replace(".java", "") + "_pro_" + c2.getRequired().getName().replace(".java", ""));
+				}
+			}
+			System.out.println("        CONECTORES");
+			for(ConnectorStructure cs : s.getConnectors()){
+				System.out.println("            " + cs.getName());
+				System.out.println("                REQUIRED");
+				System.out.println("                     " + cs.getConnector().getRequired().getName()+"_req_"+cs.getConnector().getProvided().getName());
+				System.out.println("                PROVIDED");
+				System.out.println("                     " + cs.getConnector().getProvided().getName()+"_pro_"+cs.getConnector().getRequired().getName());
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -47,6 +112,6 @@ public class App
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        System.exit(0);
-    }
+		System.exit(0);
+	}
 }

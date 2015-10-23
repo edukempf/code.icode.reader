@@ -9,8 +9,7 @@ public class Clazz {
 	private String name;
 	private ArrayList<Dependencie> interfaceDependencies;
 	private ArrayList<Dependencie> extendsDependencies;
-	private ArrayList<Dependencie> fieldsDependencies;
-	private ArrayList<Dependencie> methodsDependencies;
+	private ArrayList<Dependencie> referenceDependencies;
 	
 	public Clazz(String address, String parent, String name) {
 		this.address = address;
@@ -47,18 +46,43 @@ public class Clazz {
 	public void setExtendsDependencies(ArrayList<Dependencie> extendsDependencies) {
 		this.extendsDependencies = extendsDependencies;
 	}
-	public ArrayList<Dependencie> getFieldsDependencies() {
-		return fieldsDependencies;
+	public ArrayList<Dependencie> getReferenceDependencies() {
+		return referenceDependencies;
 	}
-	public void setFieldsDependencies(ArrayList<Dependencie> fieldsDependencies) {
-		this.fieldsDependencies = fieldsDependencies;
+	public void setReferenceDependencies(ArrayList<Dependencie> referenceDependencies) {
+		this.referenceDependencies = referenceDependencies;
 	}
-	public ArrayList<Dependencie> getMethodsDependencies() {
-		return methodsDependencies;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((address == null) ? 0 : address.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+		return result;
 	}
-	public void setMethodsDependencies(ArrayList<Dependencie> methodsDependencies) {
-		this.methodsDependencies = methodsDependencies;
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Clazz other = (Clazz) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (parent == null) {
+			if (other.parent != null)
+				return false;
+		} else if (!parent.equals(other.parent))
+			return false;
+		return true;
 	}
+	
+	
+	
 	
 	
 }

@@ -1,20 +1,25 @@
 package br.edu.utfpr.code.icode.reader.model;
 
 public class Dependencie {
-	private String name;
+	private Clazz dependence;
 	private boolean external;
 	
-	public Dependencie(String name, boolean external) {
-		this.name = name;
+	public Dependencie(Clazz dependence, boolean external) {
+		this.dependence = dependence;
 		this.external = external;
 	}
 	
-	public String getName() {
-		return name;
+	
+	public Clazz getDependence() {
+		return dependence;
 	}
-	public void setName(String name) {
-		this.name = name;
+
+
+	public void setDependence(Clazz dependence) {
+		this.dependence = dependence;
 	}
+
+
 	public boolean isExternal() {
 		return external;
 	}
@@ -27,7 +32,7 @@ public class Dependencie {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (external ? 1231 : 1237);
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((dependence == null) ? 0 : dependence.hashCode());
 		return result;
 	}
 
@@ -38,10 +43,10 @@ public class Dependencie {
 		if (getClass() != obj.getClass())
 			return false;
 		Dependencie other = (Dependencie) obj;
-		if (name == null) {
-			if (other.name != null)
+		if (dependence == null) {
+			if (other.dependence != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!dependence.equals(other.dependence))
 			return false;
 		return true;
 	}
