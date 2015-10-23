@@ -177,4 +177,81 @@ public class StructureManager {
 		return structure;
 	}
 
+	
+	public Structure addComponent(Structure structure, Component component){
+		ArrayList<Component> comps = structure.getComponents();
+		comps.add(component);
+		structure.setComponents(comps);
+		return structure;
+	}
+	
+	public Structure splitComponent(Structure structure, Component component, ArrayList<Clazz> clazzesSplit){
+		return null;
+	}
+	
+	public Structure removeComponent(Structure structure, Component component){
+		ArrayList<Component> comps = structure.getComponents();
+		comps.remove(component);
+		structure.setComponents(comps);
+		return structure;
+	}
+	
+	public Structure mergeTwoComponents(Structure structure, Component component1, Component component2){
+		Component newComponent = new Component();
+		ArrayList<Clazz> clazzes = new ArrayList<Clazz>();
+		clazzes.addAll(component1.getClazzes());
+		clazzes.addAll(component2.getClazzes());
+		newComponent.setClazzes(clazzes);
+		newComponent.setName(component1.getName()+"_merge_"+component2.getName());
+		ArrayList<Connector> reqInt = new ArrayList<Connector>();
+		ArrayList<Connector> reqExt = new ArrayList<Connector>();
+		ArrayList<Connector> proInt = new ArrayList<Connector>();
+		ArrayList<Connector> proExt = new ArrayList<Connector>();
+		reqInt.addAll(component1.getRequiredInternal());
+		reqInt.addAll(component2.getRequiredInternal());
+		proInt.addAll(component1.getProvidedInternal());
+		proInt.addAll(component2.getProvidedInternal());
+		for(Connector c : component1.getRequiredExternal()){
+			if(component2.getClazzes().contains(c.getRequired()))
+				reqInt.add(c);
+			else
+				reqExt.add(c);
+		}
+		for(Connector c : component2.getRequiredExternal()){
+			if(component1.getClazzes().contains(c.getRequired()))
+				reqInt.add(c);
+			else
+				reqExt.add(c);
+		}
+		for(Connector c : component1.getProvidedExternal()){
+			if(component2.getClazzes().contains(c.getProvided()))
+				proInt.add(c);
+			else
+				proExt.add(c);
+		}
+		for(Connector c : component2.getProvidedExternal()){
+			if(component1.getClazzes().contains(c.getProvided()))
+				proInt.add(c);
+			else
+				proExt.add(c);
+		}
+		newComponent.setProvidedExternal(proExt);
+		newComponent.setProvidedInternal(proInt);
+		newComponent.setRequiredExternal(reqExt);
+		newComponent.setRequiredInternal(reqInt);
+		
+		//int aux = structure.getComponents().indexOf(component1);
+		ArrayList<Component> comps = structure.getComponents();
+		comps.remove(component1);
+		comps.remove(component2);
+		comps.add(newComponent);
+		structure.setComponents(comps);
+		
+		return structure;
+	}
+	
+	public Structure moveClass(Structure structure, Component newLocation, Clazz clazz){
+		return null;
+	}
+	
 }
