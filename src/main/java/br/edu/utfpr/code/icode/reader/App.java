@@ -11,6 +11,7 @@ import br.edu.utfpr.code.icode.reader.model.Component;
 import br.edu.utfpr.code.icode.reader.model.Connector;
 import br.edu.utfpr.code.icode.reader.model.ConnectorStructure;
 import br.edu.utfpr.code.icode.reader.model.Structure;
+import br.edu.utfpr.code.icode.reader.model.Tree;
 import br.edu.utfpr.code.icode.reader.model.TypeConnection;
 
 /**
@@ -22,6 +23,8 @@ public class App {
 		StructureManager sm = new StructureManager();
 		try {
 			Structure s = sm.generateStructure("D:\\PROJETO EVOLUTEC\\Evolutec\\NeoNatal\\Sistema\\NeoNatal\\src\\br");
+			
+			
 			System.out.println("ARQUITETURA");
 			System.out.println("    COMPONENTES");
 			for (Component c : s.getComponents()) {
