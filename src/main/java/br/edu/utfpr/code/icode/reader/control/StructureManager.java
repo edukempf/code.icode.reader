@@ -33,7 +33,8 @@ public class StructureManager {
 		for (Component comp : components) {
 			if (!comp.equals(component)) {
 				for (Connector conn : comp.getRequiredExternal()) {
-					if (comp.getClazzes().contains(conn.getRequired())) {
+					if (component.getClazzes().contains(conn.getRequired())) {
+						//System.out.println("ewqeq");
 						Connector pc = new Connector();
 						pc.setProvided(conn.getRequired());
 						pc.setRequired(conn.getProvided());
@@ -131,7 +132,7 @@ public class StructureManager {
 			ArrayList<Connector> internalRequired = new ArrayList<Connector>();
 			ArrayList<Connector> externalRequired = new ArrayList<Connector>();
 			for (Clazz clazz : clazzes) {
-				//System.out.println(clazz.getName());
+				// System.out.println(clazz.getName());
 				if (clazz.getParent().equals(p)) {
 					clazzesPackage.add(clazz);
 					externalRequired.addAll(generateConnectorsExternalRequired(clazz));
@@ -140,7 +141,7 @@ public class StructureManager {
 			}
 			comp.setClazzes(clazzesPackage);
 			comp.setRequiredExternal(externalRequired);
-			System.out.println(internalRequired.size()+"");
+			//System.out.println(internalRequired.size() + "");
 			comp.setRequiredInternal(internalRequired);
 			components.add(comp);
 		}
@@ -177,32 +178,115 @@ public class StructureManager {
 		return structure;
 	}
 
-	
-	public Structure addComponent(Structure structure, Component component){
+	public Structure addComponent(Structure structure, Component component) {
 		ArrayList<Component> comps = structure.getComponents();
 		comps.add(component);
 		structure.setComponents(comps);
 		return structure;
 	}
-	
-	public Structure splitComponent(Structure structure, Component component, ArrayList<Clazz> clazzesSplit){
-		return null;
+
+	public Structure splitComponent(Structure structure, Component component, ArrayList<Clazz> clazzesSplit) {
+		Component c1 = new Component();
+		Component c2 = new Component();
+		ArrayList<Clazz> c1Clazzes = component.getClazzes();
+		ArrayList<Connector> reqInt = new ArrayList<Connector>();
+		ArrayList<Connector> reqExt = new ArrayList<Connector>();
+		ArrayList<Connector> proInt = new ArrayList<Connector>();
+		ArrayList<Connector> proExt = new ArrayList<Connector>();
+		for (Clazz c : clazzesSplit) {
+			c1Clazzes.remove(c);
+		}
+		for (Connector c : component.getRequiredInternal()) {
+			if (c1Clazzes.contains(c.getProvided()))
+				if (c1Clazzes.contains(c.getRequired())) {
+					reqInt.add(c);
+				} else {
+					reqExt.add(c);
+				}
+		}
+		for (Connector c : component.getRequiredExternal()) {
+			if (c1Clazzes.contains(c.getProvided())) 
+				reqExt.add(c);
+		}
+		
+		for (Connector c : component.getProvidedExternal()) {
+			if (c1Clazzes.contains(c.getProvided()))
+				if (c1Clazzes.contains(c.getRequired())) {
+					proInt.add(c);
+				} else {
+					proExt.add(c);
+				}
+		}
+		for (Connector c : component.getRequiredExternal()) {
+			if (c1Clazzes.contains(c.getProvided())) 
+				proExt.add(c);
+		}
+		
+		c1.setClazzes(c1Clazzes);
+		c1.setName(component.getName()+"_pt1");
+		c1.setProvidedExternal(proExt);
+		c1.setProvidedInternal(proInt);
+		c1.setRequiredExternal(reqExt);
+		c1.setRequiredInternal(reqInt);
+		
+		reqInt = new ArrayList<Connector>();
+		reqExt = new ArrayList<Connector>();
+		proInt = new ArrayList<Connector>();
+		proExt = new ArrayList<Connector>();
+		for (Connector c : component.getRequiredInternal()) {
+			if (clazzesSplit.contains(c.getProvided()))
+				if (clazzesSplit.contains(c.getRequired())) {
+					reqInt.add(c);
+				} else {
+					reqExt.add(c);
+				}
+		}
+		for (Connector c : component.getRequiredExternal()) {
+			if (clazzesSplit.contains(c.getProvided())) 
+				reqExt.add(c);
+		}
+		
+		for (Connector c : component.getProvidedExternal()) {
+			if (clazzesSplit.contains(c.getProvided()))
+				if (clazzesSplit.contains(c.getRequired())) {
+					proInt.add(c);
+				} else {
+					proExt.add(c);
+				}
+		}
+		for (Connector c : component.getRequiredExternal()) {
+			if (clazzesSplit.contains(c.getProvided())) 
+				proExt.add(c);
+		}
+		
+		c2.setClazzes(clazzesSplit);
+		c2.setName(component.getName()+"_pt2");
+		c2.setProvidedExternal(proExt);
+		c2.setProvidedInternal(proInt);
+		c2.setRequiredExternal(reqExt);
+		c2.setRequiredInternal(reqInt);
+		
+		structure = removeComponent(structure, component);
+		structure = addComponent(structure, c1);
+		structure = addComponent(structure, c2);
+		
+		return structure;
 	}
-	
-	public Structure removeComponent(Structure structure, Component component){
+
+	public Structure removeComponent(Structure structure, Component component) {
 		ArrayList<Component> comps = structure.getComponents();
 		comps.remove(component);
 		structure.setComponents(comps);
 		return structure;
 	}
-	
-	public Structure mergeTwoComponents(Structure structure, Component component1, Component component2){
+
+	public Structure mergeTwoComponents(Structure structure, Component component1, Component component2) {
 		Component newComponent = new Component();
 		ArrayList<Clazz> clazzes = new ArrayList<Clazz>();
 		clazzes.addAll(component1.getClazzes());
 		clazzes.addAll(component2.getClazzes());
 		newComponent.setClazzes(clazzes);
-		newComponent.setName(component1.getName()+"_merge_"+component2.getName());
+		newComponent.setName(component1.getName() + "_merge_" + component2.getName());
 		ArrayList<Connector> reqInt = new ArrayList<Connector>();
 		ArrayList<Connector> reqExt = new ArrayList<Connector>();
 		ArrayList<Connector> proInt = new ArrayList<Connector>();
@@ -211,26 +295,26 @@ public class StructureManager {
 		reqInt.addAll(component2.getRequiredInternal());
 		proInt.addAll(component1.getProvidedInternal());
 		proInt.addAll(component2.getProvidedInternal());
-		for(Connector c : component1.getRequiredExternal()){
-			if(component2.getClazzes().contains(c.getRequired()))
+		for (Connector c : component1.getRequiredExternal()) {
+			if (component2.getClazzes().contains(c.getRequired()))
 				reqInt.add(c);
 			else
 				reqExt.add(c);
 		}
-		for(Connector c : component2.getRequiredExternal()){
-			if(component1.getClazzes().contains(c.getRequired()))
+		for (Connector c : component2.getRequiredExternal()) {
+			if (component1.getClazzes().contains(c.getRequired()))
 				reqInt.add(c);
 			else
 				reqExt.add(c);
 		}
-		for(Connector c : component1.getProvidedExternal()){
-			if(component2.getClazzes().contains(c.getProvided()))
+		for (Connector c : component1.getProvidedExternal()) {
+			if (component2.getClazzes().contains(c.getProvided()))
 				proInt.add(c);
 			else
 				proExt.add(c);
 		}
-		for(Connector c : component2.getProvidedExternal()){
-			if(component1.getClazzes().contains(c.getProvided()))
+		for (Connector c : component2.getProvidedExternal()) {
+			if (component1.getClazzes().contains(c.getProvided()))
 				proInt.add(c);
 			else
 				proExt.add(c);
@@ -239,19 +323,78 @@ public class StructureManager {
 		newComponent.setProvidedInternal(proInt);
 		newComponent.setRequiredExternal(reqExt);
 		newComponent.setRequiredInternal(reqInt);
-		
-		//int aux = structure.getComponents().indexOf(component1);
+
+		// int aux = structure.getComponents().indexOf(component1);
 		ArrayList<Component> comps = structure.getComponents();
 		comps.remove(component1);
 		comps.remove(component2);
 		comps.add(newComponent);
 		structure.setComponents(comps);
-		
+
 		return structure;
 	}
-	
-	public Structure moveClass(Structure structure, Component newLocation, Clazz clazz){
-		return null;
+
+	public Structure moveClass(Structure structure, Component newLocation, Clazz clazz) {
+		ArrayList<Component> comps = structure.getComponents();
+		Component old = new Component();
+		for (Component comp : comps) {
+			if (comp.getName().equals(clazz.getParent()))
+				old = comp;
+		}
+		int pos = comps.indexOf(old);
+		comps.remove(old);
+		ArrayList<Connector> connInt = old.getRequiredInternal();
+		ArrayList<Connector> connExt = old.getRequiredExternal();
+		ArrayList<Connector> proInt = old.getRequiredInternal();
+		ArrayList<Connector> proExt = old.getRequiredExternal();
+		ArrayList<Clazz> clazzes = old.getClazzes();
+		clazzes.remove(clazz);
+		for (Connector connector : connInt) {
+			if (connector.getRequired().equals(clazz)) {
+				connExt.add(connInt.remove(connInt.indexOf(connector)));
+			}
+		}
+
+		for (Connector connector : proInt) {
+			if (connector.getProvided().equals(clazz)) {
+				proExt.add(proInt.remove(proInt.indexOf(connector)));
+			}
+		}
+		old.setClazzes(clazzes);
+		old.setProvidedExternal(proExt);
+		old.setProvidedInternal(proInt);
+		old.setRequiredExternal(connExt);
+		old.setRequiredInternal(connInt);
+		comps.add(pos, old);
+
+		pos = comps.indexOf(newLocation);
+		comps.remove(newLocation);
+		ArrayList<Clazz> clazzesNew = newLocation.getClazzes();
+		clazzesNew.add(clazz);
+		connInt = newLocation.getRequiredInternal();
+		connExt = newLocation.getRequiredExternal();
+		proExt = newLocation.getRequiredExternal();
+		proInt = newLocation.getRequiredInternal();
+		for (Connector connector : connExt) {
+			if (connector.getRequired().equals(clazz)) {
+				connInt.add(connExt.remove(connExt.indexOf(connector)));
+			}
+		}
+
+		for (Connector connector : proExt) {
+			if (connector.getProvided().equals(clazz)) {
+				proInt.add(proExt.remove(proExt.indexOf(connector)));
+			}
+		}
+		newLocation.setProvidedExternal(proExt);
+		newLocation.setProvidedInternal(proInt);
+		newLocation.setRequiredExternal(connExt);
+		newLocation.setRequiredInternal(connInt);
+		comps.add(pos, newLocation);
+
+		structure.setComponents(comps);
+
+		return structure;
 	}
-	
+
 }

@@ -2,17 +2,14 @@ package br.edu.utfpr.code.icode.reader;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.github.javaparser.ParseException;
 
-import br.edu.utfpr.code.icode.reader.control.ReaderCode;
 import br.edu.utfpr.code.icode.reader.control.StructureManager;
 import br.edu.utfpr.code.icode.reader.model.Clazz;
 import br.edu.utfpr.code.icode.reader.model.Component;
 import br.edu.utfpr.code.icode.reader.model.Connector;
 import br.edu.utfpr.code.icode.reader.model.ConnectorStructure;
-import br.edu.utfpr.code.icode.reader.model.Dependencie;
 import br.edu.utfpr.code.icode.reader.model.Structure;
 import br.edu.utfpr.code.icode.reader.model.TypeConnection;
 
@@ -98,9 +95,9 @@ public class App {
 			for(ConnectorStructure cs : s.getConnectors()){
 				System.out.println("            " + cs.getName());
 				System.out.println("                REQUIRED");
-				System.out.println("                     " + cs.getConnector().getRequired().getName().replace(".java", "")+"_req_"+cs.getConnector().getProvided().getName().replace(".java", ""));
+				System.out.println("                     " + cs.getConnector().getProvided().getName().replace(".java", "")+"_req_"+cs.getConnector().getRequired().getName().replace(".java", ""));
 				System.out.println("                PROVIDED");
-				System.out.println("                     " + cs.getConnector().getProvided().getName().replace(".java", "")+"_pro_"+cs.getConnector().getRequired().getName().replace(".java", ""));
+				System.out.println("                     " + cs.getConnector().getRequired().getName().replace(".java", "")+"_pro_"+cs.getConnector().getProvided().getName().replace(".java", ""));
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

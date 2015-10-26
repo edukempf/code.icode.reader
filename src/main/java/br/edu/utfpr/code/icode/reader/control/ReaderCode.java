@@ -77,8 +77,8 @@ public class ReaderCode {
 		ArrayList<String> list = new ArrayList<String>();
 		String[] text = genericDeclaration.split("<");
 		for (int i = 0; i < text.length; i++) {
-			if (text[i].contains(">"))
-				text[i] = text[i].replace(">", "");
+			if (!text[i].contains(">"))
+				//text[i] = text[i].replace(">", "");
 			list.add(text[i]);
 		}
 		return list;
